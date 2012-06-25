@@ -794,15 +794,15 @@ t_CKBOOL init_class_string( Chuck_Env * env, Chuck_Type * type )
     func = make_new_mfun( "string", "toString", string_toString );
     if( !type_engine_import_mfun( env, func ) ) goto error;
 
-/*    // add at()
-    func = make_new_mfun( "int", "ch", string_set_at );
+    // add at()
+    func = make_new_mfun( "string", "set_at", string_set_at );
     func->add_arg( "int", "index" );
     func->add_arg( "int", "val" );
     if( !type_engine_import_mfun( env, func ) ) goto error;
-    func = make_new_mfun( "int", "ch", string_get_at );
+    func = make_new_mfun( "int", "get_at", string_get_at );
     func->add_arg( "int", "index" );
     if( !type_engine_import_mfun( env, func ) ) goto error;
-*/
+
     // end the class import
     type_engine_import_class_end( env );
     
@@ -2507,20 +2507,30 @@ CK_DLL_MFUN( string_toString )
     RETURN->v_string = s;
 }
 
-/*
 CK_DLL_MFUN( string_set_at )
 {
     Chuck_String * s = (Chuck_String *)SELF;
-    t_CKINT c = GET_CK_INT(
-    RETURN->v_int = s->str.length();
+    Chuck_String * str = (Chuck_String *)instantiate_and_initialize_object( &t_string, NULL );
+    str->str = s->str;
+    t_CKINT index = GET_NEXT_INT(ARGS);
+    t_CKINT val = GET_CK_INT(ARGS);
+    if( index < s->str.length() ){
+        str->str[index] = val;
+    }
+    RETURN->v_string = str;
 }
 
 CK_DLL_MFUN( string_get_at )
 {
     Chuck_String * s = (Chuck_String *)SELF;
-    RETURN->v_int = s->str.length();
+    t_CKINT index = GET_CK_INT(ARGS);
+    if( index < s->str.length() ){
+        RETURN->v_int = s->str[index];
+    }
+    else{
+        RETURN->v_int = 0;
+    }
 }
-*/
 
 
 // array.size()
