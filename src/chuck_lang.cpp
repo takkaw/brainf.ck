@@ -2509,6 +2509,15 @@ CK_DLL_MFUN( string_toString )
 
 CK_DLL_MFUN( string_set_at )
 {
+#if defined(_MUTABLE_STRING_)
+    Chuck_String * s = (Chuck_String *)SELF;
+    t_CKINT index = GET_NEXT_INT(ARGS);
+    t_CKINT val = GET_CK_INT(ARGS);
+    if( index < s->str.length() ){
+        s->str[index] = val;
+    }
+    RETURN->v_string = s;
+#else
     Chuck_String * s = (Chuck_String *)SELF;
     Chuck_String * str = (Chuck_String *)instantiate_and_initialize_object( &t_string, NULL );
     str->str = s->str;
@@ -2518,6 +2527,7 @@ CK_DLL_MFUN( string_set_at )
         str->str[index] = val;
     }
     RETURN->v_string = str;
+#endif
 }
 
 CK_DLL_MFUN( string_get_at )
