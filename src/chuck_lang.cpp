@@ -799,7 +799,7 @@ t_CKBOOL init_class_string( Chuck_Env * env, Chuck_Type * type )
     func->add_arg( "int", "index" );
     func->add_arg( "int", "val" );
     if( !type_engine_import_mfun( env, func ) ) goto error;
-    func = make_new_mfun( "int", "get_at", string_get_at );
+    func = make_new_mfun( "string", "get_at", string_get_at );
     func->add_arg( "int", "index" );
     if( !type_engine_import_mfun( env, func ) ) goto error;
 
@@ -2534,12 +2534,14 @@ CK_DLL_MFUN( string_get_at )
 {
     Chuck_String * s = (Chuck_String *)SELF;
     t_CKINT index = GET_CK_INT(ARGS);
+    Chuck_String * str = (Chuck_String *)instantiate_and_initialize_object( &t_string, NULL );
     if( index < s->str.length() ){
-        RETURN->v_int = s->str[index];
+        str->str = s->str[index];
     }
     else{
-        RETURN->v_int = 0;
+        str->str = string("");
     }
+    RETURN->v_string = str;
 }
 
 
