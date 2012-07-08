@@ -206,6 +206,10 @@ DLL_QUERY libstd_query( Chuck_DL_Query * QUERY )
     QUERY->add_sfun( QUERY, atof_impl, "float", "atof" ); //! string to float
     QUERY->add_arg( QUERY, "string", "value" );
 
+    // add chr
+    QUERY->add_sfun( QUERY, chr_impl, "string", "chr" ); //! int to string
+    QUERY->add_arg( QUERY, "int", "i" );
+ 
     // add itoa
     QUERY->add_sfun( QUERY, itoa_impl, "string", "itoa" ); //! int to string
     QUERY->add_arg( QUERY, "int", "i" );
@@ -646,6 +650,15 @@ CK_DLL_SFUN( atof_impl )
     {
         RETURN->v_float = 0.0;
     }
+}
+
+// chr
+CK_DLL_SFUN( chr_impl )
+{
+    t_CKINT i = GET_CK_INT(ARGS);
+    Chuck_String * a = (Chuck_String *)instantiate_and_initialize_object( &t_string, NULL );
+    a->str = i;
+    RETURN->v_string = a;
 }
 
 // itoa
