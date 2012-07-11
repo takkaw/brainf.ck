@@ -6,16 +6,22 @@ class Brainf {
   int len;   // program size
   KBHit kb;
 
-  fun void run(string s){
-    // initialize
-    s => program;
-    0 => int i_ptr;
+  fun void init() {
+   // initialize
+    0 => i_ptr;
     for( 0 => int i ;  i < 30000 ; i++ ){
       0 => tape[i];
     }
-    program.length() => int len;
+    program.length() => len;
+  }
 
-    // main
+  fun void run(string s){
+    s => program;
+    run();
+  }
+
+  fun void run(){
+    init();
     while( i_ptr < len ){
       program.get_at(i_ptr) => string s;
 
@@ -101,6 +107,6 @@ class Brainf {
 " @=> string prime;
 
 Brainf bf;
-bf.run(prime);
 bf.run(helloworld);
+bf.run();
 
